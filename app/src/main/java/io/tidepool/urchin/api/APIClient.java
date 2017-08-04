@@ -214,6 +214,9 @@ public class APIClient {
      * @return a Request object, which may be canceled.
      */
     public Request signIn(String username, String password, final SignInListener listener) {
+        // Similar to email inputs in HTML5, trim the email (username) string of whitespace
+        String trimmedUsername = username.trim();
+
         // Clear out the database, just in case there is anything left over
         Realm realm = Realm.getDefaultInstance();
         try {
@@ -226,7 +229,7 @@ public class APIClient {
 
         // Create the authorization header with base64-encoded username:password
         final Map<String, String> headers = getHeaders();
-        String authString = username + ":" + password;
+        String authString = trimmedUsername + ":" + password;
         String base64string = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
         headers.put("Authorization", "Basic " + base64string);
 
